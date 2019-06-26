@@ -1,10 +1,7 @@
 const express = require('express')
 const Team = require('./model')
-// const bodyParser = require('body-parser')
 
 let router = express.Router()
-
-// router.use(bodyParser);
 
 router.get('/team', (req, res, next) => {
   Team.findAll()
@@ -32,7 +29,6 @@ router.post('/team', (req, res, next) => {
       .catch(err => res.status(500).send(next(err)))
 })
 
-
 router.put('/team/:id', (req, res, next) => {
   const id = req.params.id;
 
@@ -46,4 +42,5 @@ router.put('/team/:id', (req, res, next) => {
         error: err
       }))
 })
+
 module.exports = router
