@@ -5,9 +5,27 @@ const Team = require('../team/model')
 let router = express.Router()
 
 router.get('/player', (req, res, next) => {
-  Player.findAll()
-      .then(players => res.status(200).send(players))
-      .catch(err => res.status(500).send(err))
+  const limit = req.query.limit || 25
+  const offset = req.query.offset || 0
+
+  Promise.all([
+    Player.count(),
+    Player.findAll({ limit, offset })
+  ])
+    .then(([total, player]) => {
+      res.send({
+        player, total
+      })
+    })
+    .catch(error => next(error))
+
+  // Player
+  //     .count()
+  //     .then(total => Player
+  //       .findAll({ limit, offset })
+  //       .then(players => res.status(200).send({ players, total }))
+  //     )
+  //     .catch(err => res.status(500).next(err))
 })
 
 router.get('/player/:id', (req, res, next) => {
